@@ -4,9 +4,10 @@ import { Controller, Get, Post, Body, Patch, Param, Delete, Query } from '@nestj
 
 import { ApiTags } from '@nestjs/swagger';
 import { PostsService } from './posts.service';
-import { PostsListReqDto } from './dto/posts-list.req.dto';
-import { UpdatePostDto } from './dto/update-post.dto';
-import { CreatePostDto } from './dto/create-post.dto';
+import { CreatePostDto } from '../req/create-post.dto';
+import { PostsListReqDto } from '../req/posts-list.req.dto';
+import { UpdatePostDto } from '../req/update-post.dto';
+
 
 
 @ApiTags('Posts')

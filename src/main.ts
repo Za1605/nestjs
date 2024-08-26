@@ -11,6 +11,13 @@ async function bootstrap() {
     .setTitle('My API')
     .setDescription('info ')
     .setVersion('1.0')
+    //button add
+    .addBearerAuth({
+      type: 'http',
+      scheme: 'bearer',
+      bearerFormat: 'JWT',
+      in:'header'
+    })
     .addTag('cats')
     .build();
   const document = SwaggerModule.createDocument(app, config);
