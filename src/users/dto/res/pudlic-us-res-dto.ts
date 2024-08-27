@@ -1,15 +1,19 @@
-import { ApiProperty } from "@nestjs/swagger";
+import { ApiProperty, PickType } from "@nestjs/swagger";
+import { BaseUserResDto } from "./base-user-res-dto";
 
-export class PublicUsResDto {
+export class PublicUsResDto extends PickType(BaseUserResDto,[
+  'age',
+  'name',
+  'id'
+]){
   @ApiProperty()
   id: string;
+
   @ApiProperty()
   name: string;
+
   @ApiProperty()
-  email: string;
-  @ApiProperty()
-  age: number;
-  @ApiProperty()
-  password: string;
+  age: string;
+
 
 }
