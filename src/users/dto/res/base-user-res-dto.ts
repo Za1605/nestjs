@@ -8,19 +8,17 @@ export class BaseUserResDto{
   @ApiProperty({example:'Joe Doe'})
   name:string;
 
-  @ApiProperty()
   email:string;
 
-  @ApiProperty()
-  age:string;
+  age?:string;
 
-  @ApiProperty()
-  phone:string;
 
-  @ApiProperty()
+  phone?:string;
+
+
   createdAt:Date;
 
-  @ApiProperty()
+
   updatedAt:Date;
 
 
