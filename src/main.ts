@@ -1,7 +1,7 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import {DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
-import { Logger } from '@nestjs/common';
+import { Logger, ValidationPipe } from '@nestjs/common';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -18,20 +18,27 @@ async function bootstrap() {
       bearerFormat: 'JWT',
       in:'header'
     })
-    .addTag('cats')
+    //.addTag('cats')
     .build();
   const document = SwaggerModule.createDocument(app, config);
-  SwaggerModule.setup('api', app, document,{
+  SwaggerModule.setup('docs', app, document,{
     swaggerOptions: {
       docExpansion:'list',
       defaultModelsExpanDepth:7,
       persistent:true
     }
   });
+app.useGlobalPipes(
+  new ValidationPipe({
+    whitelist:true,
+    transform: true,
+    forbidNonWhitelisted: true,
+  }),
+);
 
   const port = 3000;
   const host  = 'localhost';
-  await app.listen(port, host, () => {
+  await app.listen(port,  () => {
 
     Logger.log(`Server running on http://${host}:${port}`);
 

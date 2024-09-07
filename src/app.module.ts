@@ -8,7 +8,7 @@ import { PostsModule } from './posts/dto/res/posts.module';
 
 @Module({
   imports: [UsersModule, PostsModule],
-  controllers: [AppController],
-  providers: [AppService],
+  //controllers: [AppController],
+  //providers: [AppService],
 })
 export class AppModule {}
