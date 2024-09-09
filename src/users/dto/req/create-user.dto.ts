@@ -14,15 +14,16 @@ import { IsEmail,
   ValidateNested,
   IsArray}
   from "class-validator";
+import { TransformHelper } from "src/common/helpers/transform-help";
 
 
 class CreateCarDto{
-@Transform(({value}) => value.trim())
+@Transform(TransformHelper.trim)
   @IsString()
   @Length(2,20)
   public readonly model: string;
 
-@Transform(({value}) => value.trim())
+@Transform(TransformHelper.trim)
   @IsString()
   @Length(2,20)
   public readonly produser: string;
@@ -37,19 +38,19 @@ export class CreateUserDto {
   public readonly email: string;
 
 
- @Transform(({value}) => value.trim())
+ @Transform(TransformHelper.trim)
   @IsNotIn(['password','qwe', '123' ])
   @IsString()
   @Matches(/^\w+([\.-]?\w+)*$/, {message: 'Please enter a valid email address'})
   public readonly password: string;
 
-@Transform(({value}) => value.trim())
-@Transform(({value}) => value.toLowerCase())
+@Transform(TransformHelper.trim)
+@Transform(TransformHelper.toLowerCase)
   @IsString()
   @Length(2,20)
   public readonly name: string;
 
-  @Transform(({value}) => value.trim())
+  @Transform(TransformHelper.trim)
 @IsString()
   @ValidateIf((obj)=>obj.age ===35)
 @IsOptional()
