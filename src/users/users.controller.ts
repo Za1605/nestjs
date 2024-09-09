@@ -8,7 +8,7 @@ import { Controller,
   Req} from '@nestjs/common';
 import { UsersService } from './users.service';
 
-import { ApiOkResponse, ApiTags,ApiCreatedResponse,ApiNoContentResponse, ApiBearerAuth } from '@nestjs/swagger';
+import { ApiOkResponse, ApiTags,ApiCreatedResponse,ApiNoContentResponse, ApiBearerAuth, ApiUnauthorizedResponse, ApiConflictResponse, ApiForbiddenResponse, ApiBadRequestResponse } from '@nestjs/swagger';
 import { CreateUserDto } from './dto/req/create-user.dto';
 import { UpdateUserDto } from './dto/req/update-user.dto';
 import { PublicUsResDto } from './dto/res/pudlic-us-res-dto';
@@ -22,13 +22,12 @@ import { PrivateUsResDto } from './dto/res/private-us-res-dto';
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
-  @ApiBearerAuth()
-  @ApiCreatedResponse ({type: PublicUsResDto})
+  @ApiBadRequestResponse({ description: 'User Not Found' })
   @Post()
   public async create(
     @Req() req:Request,
     @Body () dto: CreateUserDto
-  ):Promise<any> {
+  ):Promise<PrivateUsResDto> {
     return await this.usersService.create(dto);
   }
 
@@ -36,28 +35,51 @@ export class UsersController {
   public async findAll():Promise<any> {
     return await this.usersService.findAll();
   }
-  @ApiOkResponse()
+
+
+  @ApiBearerAuth()
+  @ApiUnauthorizedResponse({ description: 'User Not Found' })
+  @ApiForbiddenResponse({description: 'Forbitten'})
+  @ApiConflictResponse({description: 'Conflict'})
   @Get('me')
-  public async findMe(@Param('id') id: string) :Promise<any>{
-    return await this.usersService.findOne(+id);
+  public async findMe() :Promise<PrivateUsResDto>{
+    return await this.usersService.findOne(1);
   }
-  @ApiOkResponse({type: PrivateUsResDto})
+
+  @ApiBearerAuth()
+  @ApiUnauthorizedResponse({ description: 'User Not Found' })
+  @ApiForbiddenResponse({description: 'Forbidden'})
+  @ApiConflictResponse({description: 'Conflict'})
+  @ApiBadRequestResponse({description: 'Bed Request'})
   @Patch('me')
-  public async updateMe(@Body() dto:  UpdateUserDto):Promise<any> {
+  public async updateMe
+  (@Body() dto:  UpdateUserDto,
+   ):Promise<PrivateUsResDto> {
     return await this.usersService.updateMe(1, dto);
   }
+
+
+  @ApiBearerAuth()
+  @ApiUnauthorizedResponse({ description: 'User Not Found' })
+  @ApiForbiddenResponse({description: 'Forbidden'})
+  @ApiConflictResponse({description: 'Conflict'})
   @ApiNoContentResponse({description: 'User has been remover'})
   @Delete('me')
-  public async removeMe():Promise<any> {
+  public async removeMe():Promise<void> {
     return await this.usersService.removeMe(1);
   }
-  @ApiOkResponse({type: PublicUsResDto})
+
+
+
+
   @Get(':userId')
-  public async findOne(@Param('userIid')userId:string):Promise<any>{
+  public async findOne
+  (@Param('userIid')userId:string,
+   ):Promise<PublicUsResDto>{
     return await this.usersService.findOne(+userId);
   }
 }
-function ApiBearer(target: UsersController, propertyKey: 'create', descriptor: TypedPropertyDescriptor<(req: Request, dto: CreateUserDto) => Promise<any>>): void | TypedPropertyDescriptor<(req: Request, dto: CreateUserDto) => Promise<any>> {
-  throw new Error('Function not implemented.');
-}
+
+
+
 
